@@ -6,8 +6,8 @@
 __author__ = 'Joram Schito'
 __copyright__ = 'Copyright 2017, ETH Zurich'
 __credits__ = 'Joram Schito'
-__license__ = 'ETH Zurich'
-__version__ = '0.1.01'
+__license__ = 'MIT'
+__version__ = '0.1.2'
 __maintainer__ = 'Joram Schito'
 __email__ = 'joram@joramschito.ch'
 __status__ = 'Development'
@@ -85,6 +85,12 @@ def sonify(array):
 
 
 def read_csv_to_numpy(in_csv):
+    """
+    Helper function to read the CSV file to a NumPy array
+    :param in_csv: The path to the input CSV file
+    :return: The NumPy array
+    """
+
     # first, check if input file exists
     if not os.path.exists(in_csv):
         print("*** ERROR! The input file does not exist. I quit the program here.")
@@ -94,16 +100,29 @@ def read_csv_to_numpy(in_csv):
     return my_data
 
 
-def extract_column_from_array(array, colnumber):
+def extract_column_from_array(array, col_number):
+    """
+    Extracts a specific column from an array and copies it to a list
+    :param array: The NumPy array with the data
+    :param col_number: The number of the column that should be extracted
+    :return: The list with the extracted values
+    """
+
     extracted_column = []
     for row in array:
         for number, column in enumerate(row):
-            if number == colnumber:
+            if number == col_number:
                 extracted_column.append(column)
     return extracted_column
 
 
 def eliminate_outliers_from_column(column):
+    """
+    Detects outlier from the extracted columns and elimininates them
+    :param column: A list with the extracted values
+    :return: A list with the values without outliers
+    """
+
     mean = np.mean(column)
     std = np.std(column)
     lower_bound = mean - constants.max_std_dev_for_determining_outliers * std
@@ -121,6 +140,14 @@ def eliminate_outliers_from_column(column):
 
 
 def normalize_column_to_midi_range(column, target_range, target_min_value):
+    """
+    Normalizes the values to the values range used by the MIDI format
+    :param column: A list with the values that should be sonified
+    :param target_range: The target range
+    :param target_min_value: The target minimum value
+    :return: A list with the transformed values
+    """
+
     # determine min and max of the array
     min_value = min(column)
     max_value = max(column)
